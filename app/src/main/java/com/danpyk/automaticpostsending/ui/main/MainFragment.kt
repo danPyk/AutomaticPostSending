@@ -44,6 +44,7 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         // TODO: Use the ViewModel
+        
     }
 
      fun applyWork() {
