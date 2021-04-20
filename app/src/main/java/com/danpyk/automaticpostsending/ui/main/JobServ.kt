@@ -1,41 +1,56 @@
 package com.danpyk.automaticpostsending.ui.main
 
 import android.app.NotificationManager
+import android.app.job.JobInfo
+import android.app.job.JobParameters
+import android.app.job.JobService
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.preference.PreferenceManager
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.io.BufferedReader
 import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
+import kotlin.coroutines.coroutineContext
 
 
-class MessageWork(context: Context, workerParams: WorkerParameters) :
-    Worker(context, workerParams) {
-    var text: String = ""
+class JobServ: JobService() {
 
-    override fun doWork(): Result {
+    val scope = CoroutineScope(CoroutineName("MyScope"))
 
-        return try {
-            sendMSG()
-            return Result.success()
-        } catch (throwable: Throwable) {
+    override  fun onStartJob(params: JobParameters?): Boolean {
+       scope.launch {
+           val job = launch {
+               while(isActive){
+                   sendMSG("newMsg")
+               }
+           }
+           job.cancel()
+           job.join()
+       }
+        return false
 
-            // Error.e(throwable, "Error failure")
-            Result.failure()
-        }
     }
 
-    companion object {
-        //pass msg content
-        const val MESSAGE = "message"
+    override fun onStopJob(params: JobParameters?): Boolean {
+        return true
     }
 
+    var textt: String = "Elo"
 
-    private  fun sendMSG(){
+    private fun callsendMSG(){
+    }
+
+     fun sendMSG(text: String){
         val url = URL("https://fcm.googleapis.com/fcm/send")
         val con: HttpsURLConnection = url.openConnection() as HttpsURLConnection
         con.setRequestMethod("POST")
@@ -43,15 +58,13 @@ class MessageWork(context: Context, workerParams: WorkerParameters) :
         con.setRequestProperty("Authorization",
             "key=AAAAJBZUzuM:APA91bFa8-P-VwqWMI4kMWkX6jwxLNCSUbLpIgyGtSmmXlEHCdJbnigfK0-kLo-SO3BEoMsQ1HW5RqP6VjV_ok9RNGC80myDQRzDbSC1kvnM3KSRTWrfZEh1hove8KtVsYqX8Mtqw4L6")
 
-/* Payload support */
-
 /* Payload support */con.setDoOutput(true)
         val out = DataOutputStream(con.getOutputStream())
         out.writeBytes("{\n")
         out.writeBytes("  \"to\": \"/topics/kanyepushh\",\n")
         out.writeBytes("  \"data\":{\n")
         out.writeBytes("    \"key\" \"d2.\",\n")
-        out.writeBytes("    \"title\":\"kanyepush\",\n")
+        out.writeBytes("    \"title\":\"$text\",\n")
         out.writeBytes("    \"my_custom_key2\":\"true\"\n")
         out.writeBytes("  }\n")
         out.writeBytes("}")
@@ -69,7 +82,9 @@ class MessageWork(context: Context, workerParams: WorkerParameters) :
         con.disconnect()
         println("Response status: $status")
         println(content.toString())
+        Log.i(TAG, "sendMSG: called")
     }
+
 
 }
 
