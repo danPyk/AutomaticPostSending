@@ -44,11 +44,10 @@ class MainFragment : Fragment() {
     private fun createJob(){
         val jobScheduler = activity?.getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
         val jobInfo = JobInfo.Builder(123, ComponentName(context!!, JobServ::class.java))
+
         val job = jobInfo.setPeriodic(900000)
-               // .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-
+            .setPersisted(true)
                 .build()
-
         jobScheduler.schedule(job)
     }
 
