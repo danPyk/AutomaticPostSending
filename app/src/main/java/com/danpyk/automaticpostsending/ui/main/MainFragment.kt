@@ -3,16 +3,13 @@ package com.danpyk.automaticpostsending.ui.main
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
-import android.content.Context
 import android.content.Context.JOB_SCHEDULER_SERVICE
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.work.*
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.danpyk.automaticpostsending.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
@@ -32,13 +29,6 @@ class MainFragment : Fragment() {
 
         binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding!!.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-        // TODO: Use the ViewModel
-
     }
 
     private fun createJob(){
