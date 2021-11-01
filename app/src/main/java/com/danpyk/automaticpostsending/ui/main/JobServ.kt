@@ -49,9 +49,8 @@ class JobServ : JobService() {
         con.setRequestMethod("POST")
         con.setRequestProperty("Content-Type", "application/json")
         con.setRequestProperty(
-                "Authorization",
-                "key=AAAAJBZUzuM:APA91bFa8-P-VwqWMI4kMWkX6jwxLNCSUbLpIgyGtSmmXlEHCdJbnigfK0-kLo-SO3BEoMsQ1HW5RqP6VjV_ok9RNGC80myDQRzDbSC1kvnM3KSRTWrfZEh1hove8KtVsYqX8Mtqw4L6"
-        )
+                "Authorization", ""
+//todo key        )
 
 /* Payload support */con.setDoOutput(true)
         val out = DataOutputStream(con.getOutputStream())
@@ -60,7 +59,8 @@ class JobServ : JobService() {
         out.writeBytes("  \"data\":{\n")
         out.writeBytes("    \"key\" \"$currentQuote\",\n")
         out.writeBytes("    \"title\":\"kanyepush\",\n")
-        out.writeBytes("    \"my_custom_key2\":\"true\"\n")
+        //todo key
+        out.writeBytes("    \"\":\"true\"\n")
         out.writeBytes("  }\n")
         out.writeBytes("}")
         out.flush()
